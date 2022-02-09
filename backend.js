@@ -4,9 +4,7 @@ const app = express()
 const port = 3000
 
 app.use(express.static('kepek'))
-
 app.use(cors())
-
 app.use(express.json())
 
 app.get('/', (req, res) => {
@@ -245,34 +243,110 @@ app.get('/Alkar', (req, res) => {
 
 
 
+app.get('/tema', (req, res) => {
+  var mysql = require('mysql')
+  var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'zarodolgozat'
+  })
+  
+  connection.connect()
+  
+  connection.query('SELECT * from uzenetek ORDER BY uzenet_id DESC ', function (err, rows, fields) {
+    if (err) throw err
+  
+    console.log(rows)
+
+    res.send(rows)
+  })
+  
+  connection.end()    
+
+})
 
 
 /*
-  app.post('/szavazatfelvitel', (req, res) => {
-
-    var mysql = require('mysql')
-    var connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'marveladatb'
-    })
-    
-    connection.connect()
-    
-    connection.query('insert into szavazat values (null, '+req.body.bevitel1+' )', function (err, rows, fields) {
-      if (err) throw err
-    
-      console.log("Szavazatát rögzítettük!")
-      res.send("Szavazatát rögzítettük!")
-    })
-    
-    connection.end()
-
-
-  
+app.get('/temalekerdez', (req, res) => {
+  var mysql = require('mysql')
+  var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'zarodolgozat'
   })
+  
+  connection.connect()
+  
+  connection.query('SELECT * from uzenetek', function (err, rows, fields) {
+    if (err) throw err
+  
+    console.log(rows)
+
+    res.send(rows)
+  })
+  
+  connection.end()    
+
+})
 */
+
+
+
+
+app.post('/kommentfelvitel', (req, res) => {
+  var mysql = require('mysql')
+  var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'zarodolgozat'
+  })
+  
+  connection.connect()
+  
+  let dt=new Date();
+  let teljesdat=dt.getFullYear()+"-"+  (dt.getMonth()+1)   +"-"+dt.getDate();
+  connection.query("INSERT INTO uzenetek VALUES (NULL, '"+req.body.bevitel1+"', '"+req.body.bevitel2+"', '"+teljesdat+"') ", function (err, rows, fields) {
+    if (err) throw err
+  
+    console.log("Sikeres felvitel!")
+
+    res.send("Sikeres felvitel!")
+  })
+  
+  connection.end()    
+
+})  
+
+
+app.get('/etrend_tipus', (req, res) => {
+  var mysql = require('mysql')
+  var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'zarodolgozat'
+  })
+  
+  connection.connect()
+  
+  connection.query('SELECT * from etrend_tipus', function (err, rows, fields) {
+    if (err) throw err
+  
+    console.log(rows)
+
+    res.send(rows)
+  })
+  
+  connection.end()    
+
+})
+
+
+
+
 
 
 app.listen(port, () => {
