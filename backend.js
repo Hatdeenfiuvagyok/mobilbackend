@@ -332,7 +332,7 @@ app.get('/etrend_tipus', (req, res) => {
   
   connection.connect()
   
-  connection.query('SELECT * from etrend_tipus', function (err, rows, fields) {
+  connection.query('SELECT kiegeszitok_nev, kiegeszitok_leiras FROM kiegeszitok', function (err, rows, fields) {
     if (err) throw err
   
     console.log(rows)
